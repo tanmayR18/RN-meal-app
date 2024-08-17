@@ -12,12 +12,13 @@ const MealsOverviewScreen = ({ route}) => {
     })
 
     const renderMealItem = (itemData) => {
-        return <MealItem  title={itemData.item.title} />
+        return <MealItem  itemData = {itemData.item} />
     }
 
   return (
     <View style={styles.container}>
       <FlatList 
+        showsVerticalScrollIndicator={false}
         data={displayedMeals}
         keyExtractor={ itemData => itemData.id}
         renderItem={renderMealItem}
