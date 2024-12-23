@@ -1,34 +1,65 @@
-import { StyleSheet, Text, View, Image} from 'react-native'
-import React, { useLayoutEffect } from 'react'
-import MealDetails from '../components/MealDetails'
+import { StyleSheet, Text, View, Image, ScrollView, Button } from "react-native";
+import React, { useLayoutEffect } from "react";
+import MealDetails from "../components/MealDetails";
+import Subtitle from "../components/MeailDetail/Subtitle";
+import List from "../components/MeailDetail/List";
+import IconButton from "../components/IconButton";
 
-const MealDetailScreen = ({route, navigation}) => {
-    const {itemData} = route.params
+const MealDetailScreen = ({ route, navigation }) => {
+  const { itemData } = route.params;
 
-    useLayoutEffect( () => {
-        navigation.setOptions({
-            title: itemData.title
-        })
-    },[])
+  const headerButtonPressHander = () => {
+    console.log("Added to favorites");
+  }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: itemData.title,
+      headerRight: () => {
+        return <IconButton color={'white'} icon={'star'} size={24} onpress={headerButtonPressHander} />
+      }
+    });
+  }, [navigation, headerButtonPressHander]);
 
   return (
-    <View>
-      <Image source={{ uri: itemData.imageUrl}} />
-      <Text></Text>
-      
-      <MealDetails itemData={itemData}/>
-      <Text>Ingredients</Text>
-      {
-        itemData.ingredients.map( (ingredient, index) => <Text key={index}>{ingredient}</Text>)
-      }
-      <Text>Steps</Text>
-      {
-        itemData.steps.map( (step, index) => <Text key={index}>{step}</Text>)
-      }
-    </View>
-  )
-}
+    <ScrollView style={styles.scrollContainer}>
+      <Image style={styles.image} source={{ uri: itemData.imageUrl }} />
+      <Text style={styles.title}>{itemData.title}</Text>
 
-export default MealDetailScreen
+      <MealDetails textStyle={styles.detailText} itemData={itemData} />
+      <View style={styles.listContainer}>
+        <Subtitle>Ingredients</Subtitle>
+        <List dataArr={itemData.ingredients} />
+        <Subtitle>Steps</Subtitle>
+        <List dataArr={itemData.steps} />
+      </View>
+    </ScrollView>
+  );
+};
 
-const styles = StyleSheet.create({})
+export default MealDetailScreen;
+
+const styles = StyleSheet.create({
+  image: {
+    width: "100%",
+    height: 350,
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 24,
+    margin: 8,
+    color: "white",
+    textAlign: "center",
+  },
+  detailText: {
+    color: "white",
+  },
+  scrollContainer: {
+    flex: 1,
+    marginBottom: 20,
+  },
+  listContainer: {
+    width: "80%",
+    alignSelf: "center",
+  },
+});
