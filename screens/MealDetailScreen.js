@@ -1,23 +1,43 @@
-import { StyleSheet, Text, View, Image, ScrollView, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ScrollView,
+  Button,
+} from "react-native";
 import React, { useLayoutEffect } from "react";
 import MealDetails from "../components/MealDetails";
 import Subtitle from "../components/MeailDetail/Subtitle";
 import List from "../components/MeailDetail/List";
 import IconButton from "../components/IconButton";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavourite, removeFavourite } from "../store/slice";
 
 const MealDetailScreen = ({ route, navigation }) => {
   const { itemData } = route.params;
+  const dispatch = useDispatch();
+  const isItemFavourite = useSelector(state => state.favourite.value.includes(itemData.id));
 
   const headerButtonPressHander = () => {
-    console.log("Added to favorites");
-  }
+    isItemFavourite
+      ? dispatch(removeFavourite(itemData.id))
+      : dispatch(addFavourite(itemData.id));
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: itemData.title,
       headerRight: () => {
-        return <IconButton color={'white'} icon={'star'} size={24} onpress={headerButtonPressHander} />
-      }
+        return (
+          <IconButton
+            color={"white"}
+            icon={isItemFavourite ? "star" : "star-outline"}
+            size={24}
+            onpress={headerButtonPressHander}
+          />
+        );
+      },
     });
   }, [navigation, headerButtonPressHander]);
 
