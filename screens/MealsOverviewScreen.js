@@ -3,6 +3,7 @@ import React, { useEffect, useLayoutEffect } from 'react'
 
 import { CATEGORIES, MEALS } from '../data/dummy-data'
 import MealItem from '../components/MealItem'
+import MealList from '../components/MealList'
 
 const MealsOverviewScreen = ({ route, navigation}) => {
     const categoryId = route.params.categoryId
@@ -24,12 +25,7 @@ const MealsOverviewScreen = ({ route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <FlatList 
-        showsVerticalScrollIndicator={false}
-        data={displayedMeals}
-        keyExtractor={ itemData => itemData.id}
-        renderItem={renderMealItem}
-      />
+      <MealList data={displayedMeals} />
     </View>
   )
 }
